@@ -14,7 +14,6 @@ function PathContainerCtrl($ngRedux) {
       paths: state.readableDefinition.paths,
       editablePaths: state.editableDefinition.paths,
       pathsState: state.uiState.paths,
-      definitions: Object.keys(state.readableDefinitions.definitions),
     };
   }
 

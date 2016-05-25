@@ -4,7 +4,7 @@ function OperationCtrl($ngRedux) {
   function mapStateToCtrl({ rootReducer }) {
     const state = rootReducer;
     return {
-      definitions: Object.keys(state.readableDefinitions.definitions),
+      definitions: Object.keys(state.readableDefinition.definitions),
     };
   }
 
@@ -21,11 +21,30 @@ function OperationCtrl($ngRedux) {
   ];
 
   this.addParameter = (pathName, operation) => {
-    console.log(pathName, operation);
     $ngRedux.dispatch({
       type: 'ADD_PARAMETER',
       pathName,
       operation,
+    });
+  };
+
+  this.updateInTypeOfParameter = function updateInTypeOfParameter(pathName, operation, inType, index) {
+    if (inType === 'body') {
+      $ngRedux.dispatch({
+        type: 'ADD_SCHEMA_TO_PARAMETER',
+        pathName,
+        operation,
+        index,
+      });
+      return;
+    }
+
+    $ngRedux.dispatch({
+      type: 'ADD_EXTRA_FIELDS_TO_PARAMETER',
+      pathName,
+      operation,
+      index,
+      inType,
     });
   };
 

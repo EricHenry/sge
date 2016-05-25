@@ -15,6 +15,8 @@ const NEW_OPERATION = {
 function editablePathsReducer(state = INITIAL_STATE, action) {
   let newPaths;
   let newPath;
+  let parameter;
+  let newParam
 
   switch (action.type) {
     case 'DELETE_PATH':
@@ -48,10 +50,39 @@ function editablePathsReducer(state = INITIAL_STATE, action) {
     case 'ADD_RESPONSE':
     case 'ADD_PARAMETER':
       newPath = angular.copy(state[action.pathName], {});
-      console.log(state);
-      console.log(newPath);
-      console.log(action);
       newPath[action.operation].parameters.push({ name: 'update me!', required: false });
+
+      return Object.assign({}, state, { [action.pathName]: newPath });
+
+    case 'ADD_SCHEMA_TO_PARAMETER':
+      newPath = angular.copy(state[action.pathName], {});
+      parameter = newPath[action.operation].parameters[action.index];
+      newParam = {
+        name: parameter.name,
+        required: parameter.required,
+        in: parameter.in,
+        description: parameter.description,
+        schema: { $ref: '' },
+      };
+
+      newPath[action.operation].parameters.splice(action.index, 1, newParam);
+
+      return Object.assign({}, state, { [action.pathName]: newPath });
+
+    case 'ADD_EXTRA_FIELDS_TO_PARAMETER':
+      newPath = angular.copy(state[action.pathName], {});
+      parameter = newPath[action.operation].parameters[action.index];
+      newParam = {
+        name: parameter.name,
+        required: action.inType === 'path' ? true : parameter.required,
+        in: action.inType,
+        description: parameter.description,
+        type: '',
+        format: '',
+        items: {},
+      };
+
+      newPath[action.operation].parameters.splice(action.index, 1, newParam);
 
       return Object.assign({}, state, { [action.pathName]: newPath });
 

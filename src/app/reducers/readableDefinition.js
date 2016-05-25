@@ -14,7 +14,11 @@ function readableDefinitionReducer(state = INITIAL_STATE, action) {
     info: readableInfo(state.info, action),
     paths: readablePaths(state.paths, action),
     // definitions: readableDefinitions(state.definitions, action),
-    definitions: {},
+    definitions: {
+      person: {},
+      address: {},
+      car: {},
+    },
   };
 }
 
